@@ -1,0 +1,54 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Owner {
+  id String @id
+  fullName String?
+  username String?
+  contents Content[]
+}
+
+model Content {
+  id String @id
+  owner Owner @relation(fields: [ownerId], references: [id])
+  ownerId String
+  ownerFullName String
+  permalinkUrl String
+  description String
+  thumbnail String
+  descriptionWithMentions String
+  commentsDisabled Boolean
+  igMediaType String
+  postStatus String
+  children String
+  timestamp Int
+  metrics Metric[]
+}
+
+model Metric {
+  key Int @id @default(autoincrement())
+  id String
+  likeCount Int
+  commentCount Int
+  saveCount Int
+  profileVisitCount Int
+  followerGainCount Int
+  shareCount Int
+  videoViewCount Int
+  reachCount Int
+  reachFromNonFollower Int
+  impressionCount Int
+  impressionFromFeed Int
+  impressionFromProfile Int
+  impressionFromHashtag Int
+  impressionFromExplore Int
+  impressionFromOther Int
+  scrapedAt Int
+  content Content? @relation(fields: [id], references: [id])
+}
